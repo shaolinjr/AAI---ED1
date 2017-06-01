@@ -6,19 +6,23 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 #include "AAI.h"
 
+int posicaoAlfabeto (char letra){
+	return (int)letra - (int) 'A' + 1;
+}
 
-void criarMatricula (char *nomeAluno, char *matricula) // Receber como parametro um nome de aluno
+void criarMatricula (char *nomeAluno, char *matricula, int *alfabeto) // Receber como parametro um nome de aluno
 {
-//    char posicaoUm;
     char posicao2e3[3];
     char posicao4e5[3];
     char posicao6e7[3];
-    char posicao8;
+    char posicao8[2];
     char inicial = toupper((int) nomeAluno[0]);
     int contVerificador;
-    int somasVerificador[6];
+	int i;
 
     // digito 1
     matricula[0] = inicial;
@@ -30,13 +34,13 @@ void criarMatricula (char *nomeAluno, char *matricula) // Receber como parametro
     strcat(matricula, posicao2e3);
 
     // 4 e 5 digitos
-    int posicaoAlfabeto = (int)inicial - (int)'A' + 1;
-    if (posicaoAlfabeto < 10){
+    int posAlfabeto = posicaoAlfabeto(inicial);
+    if (posAlfabeto < 10){
         posicao4e5[0] = '0';
-        sprintf(&posicao4e5[1], "%d", posicaoAlfabeto);
+        sprintf(&posicao4e5[1], "%d", posAlfabeto);
 
     }else{
-        snprintf(posicao4e5,3, "%d", posicaoAlfabeto); // temos que lembrar sempre do \0 quando se trata de string
+        snprintf(posicao4e5,3, "%d", posAlfabeto); // temos que lembrar sempre do \0 quando se trata de string
     }
     matricula[5] = '\0';
     strcat(matricula, posicao4e5);
@@ -44,27 +48,43 @@ void criarMatricula (char *nomeAluno, char *matricula) // Receber como parametro
 
 
     // 6 e 7 digitos
-    // temos que iterar sobre a lista de alunos
-    // verificar o atributo inicial do aluno e ver se é igual o inicial dessa funçao
-    // a cada igualdade, icrementamos o contador, que representará os 6 e 7 digitos
+	alfabeto[posAlfabeto -1]++; // incrementando array -> colocamos aqui, pois começamos o array com 0
+	int contagemAlunos = alfabeto[posAlfabeto - 1];
+	if (contagemAlunos < 10){
+		matricula[5] = '0';
+		sprintf(&matricula[6],"%d",contagemAlunos);
+		matricula[7] = '\0';
+
+	}else{
+		snprintf(posicao6e7,3,"%d",contagemAlunos);
+		strcat(matricula, posicao6e7);
+	}
+
+
+	int somasVerificador = 0;
+	int  verificador;
+	for (i = 1; matricula[i] != '\0';i++){
+		somasVerificador += ((int)matricula[i] - (int)'0')*(i * 5);
+	}
+	verificador = somasVerificador % 11;
+
+	if (verificador == 10){
+		matricula[7] = '0';
+		matricula[8] = '\0';
+	}else{
+
+		sprintf(posicao8,"%d",verificador);
+		strcat(matricula, posicao8);
+	}
+
 
 }
 
-void adicionarDigitoVerificador (char *matricula){
-    int i;
-    int somasVerificador = 0;
-    int verificador = somasVerificador % 11;
-    for (i = 1; matricula[i] != '\0';i++){
-       somasVerificador += ((int)matricula[i] - (int)'0')*(i * 5);
-    }
-
-    if (verificador == 10){
-        matricula[i] = '0';
-    }else{
-
-        sprintf(&matricula[i],"%d",verificador);
-    }
-}
+//
+//void adicionarDigitoVerificador (char *matricula){
+//    int i;
+//
+//}
 
 
 
@@ -112,6 +132,7 @@ void imprimirLista (ListItem *lista){
 	while(tmp->proxItem != NULL){
 		printf("\n%s",tmp->proxItem->conteudo.alunoDados.nome);
 		printf("\n%s",tmp->proxItem->conteudo.alunoDados.email);
+		printf("\n%s",tmp->proxItem->conteudo.alunoDados.matricula);
 		printf("\n-----------------\n");
 		tmp = tmp->proxItem;
 	}

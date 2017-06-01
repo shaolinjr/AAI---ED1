@@ -10,8 +10,8 @@
 
 typedef struct {
 	char nome[50];
-	char inicial[2];
-	char matricula[8];
+//	char inicial[2];
+	char matricula[9];
 	char email[50];
 	long telefone;
 }dadosAluno;
@@ -35,14 +35,14 @@ ListItem* criaLista ();
 void inserir(ListItem *lista, aluno novoAluno);
 void imprimirLista (ListItem *lista);
 void cadastrarAluno();
-
+int posicaoAlfabeto (char letra);
 void relatorioAlunosAprovados(); // talvez passar a lista como parametro
 
 void relatorioAlunosReprovados(); // talvez passar a lista como parametro
 
 void relatorioGeral(); // talvez passar a lista como parametro
 
-void criarMatricula (char *nomeAluno, char *matricula);
+void criarMatricula (char *nomeAluno, char *matricula, int *alfabeto);
 
 void adicionarDigitoVerificador (char *matricula);
 
