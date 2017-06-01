@@ -127,6 +127,13 @@ void inserir(ListItem *lista, aluno novoAluno){
 }
 
 void imprimirLista (ListItem *lista){
+
+	if(!lista){
+		printf("Erro de memória");
+		exit(1);
+	}
+
+
 	ListItem *tmp = lista;
 
 	while(tmp->proxItem != NULL){
