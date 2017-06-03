@@ -34,7 +34,7 @@ ListItem* criaLista ();
 
 void inserir(ListItem *lista, aluno novoAluno);
 void imprimirLista (ListItem *lista);
-void cadastrarAluno();
+void cadastrarAluno(ListItem *lista);
 int posicaoAlfabeto (char letra);
 void relatorioAlunosAprovados(); // talvez passar a lista como parametro
 
@@ -43,7 +43,5 @@ void relatorioAlunosReprovados(); // talvez passar a lista como parametro
 void relatorioGeral(); // talvez passar a lista como parametro
 
 void criarMatricula (char *nomeAluno, char *matricula, int *alfabeto);
-
-void adicionarDigitoVerificador (char *matricula);
 
 #endif /* AAI_H_ */

@@ -10,6 +10,8 @@
 #include <ctype.h>
 #include "AAI.h"
 
+int alfabeto[26] = {0}; // fazendo assim, inicializamos todas as posicoes como sendo 0, só funciona quando o valor é 0
+
 int posicaoAlfabeto (char letra){
 	return (int)letra - (int) 'A' + 1;
 }
@@ -80,14 +82,6 @@ void criarMatricula (char *nomeAluno, char *matricula, int *alfabeto) // Receber
 
 }
 
-//
-//void adicionarDigitoVerificador (char *matricula){
-//    int i;
-//
-//}
-
-
-
 
 ListItem* criaLista (){
 	ListItem *lista = (ListItem*) malloc (sizeof(ListItem));
@@ -145,36 +139,72 @@ void imprimirLista (ListItem *lista){
 	}
 }
 
-//void cadastrarAluno(ListItem *lista){
-//
-//	dadosAluno novoAluno;
-//	aluno aluno;
-//
-//	do{
-//		printf("\nDigite o Nome do Aluno: ");
-//		fflush(stdin);
-//		gets(novoAluno.nome);
-//
-//		if (strlen(novoAluno.nome) == 0){
-//			printf("\nPreencha o Nome.");
-//		}
-//	} while (strlen(novoAluno.nome) == 0);
-//
-//	do{
-//		printf("\nDigite o E-mail do Aluno: ");
-//		fflush(stdin);
-//		gets(novoAluno.email);
-//		if (strstr(novoAluno.email, "@") == NULL) {
-//			printf("\nDigite um e-mail válido.");
-//		}
-//	} while (strstr(novoAluno.email, "@") == NULL);
-//
-//	printf("\nDigite o DDD+Telefone: ");
-//	fflush(stdin);
-//	scanf("&l",&novoAluno.telefone);
-//
-//	aluno.alunoDados = novoAluno;
-//
-//	inserir(lista, aluno);
-//}
+void cadastrarAluno(ListItem *lista){
+
+	dadosAluno novoAluno;
+	aluno aluno;
+    char matricula[9];
+	//Inserção de Dados Cadastrais
+	do{
+		printf("\nDigite o Nome do Aluno: ");
+		fflush(stdin);
+		gets(novoAluno.nome);
+
+		if (strlen(novoAluno.nome) == 0){
+			printf("\nPreencha o Nome.");
+		}
+	} while (strlen(novoAluno.nome) == 0);
+
+	do{
+		printf("\nDigite o E-mail do Aluno: ");
+		fflush(stdin);
+		gets(novoAluno.email);
+		if ((strstr(novoAluno.email, "@") == NULL) || (strstr(novoAluno.email, ".") == NULL)) {
+			printf("\nDigite um e-mail válido.");
+		}
+	} while ((strstr(novoAluno.email, "@") == NULL) || (strstr(novoAluno.email, ".") == NULL));
+
+    do {
+        printf("\nDigite o DDD+Telefone: ");
+        fflush(stdin);
+        scanf("%li", &novoAluno.telefone);
+
+        if(novoAluno.telefone <= 0){
+            printf("Telefone inválido.");
+        }
+    }while(novoAluno.telefone <= 0);
+	//Inserção de Notas
+	do {
+		printf("\nDigite a nota da prova 1: ");
+		fflush(stdin);
+		scanf("%f", &aluno.prova1);
+		if (aluno.prova1 < 0 || aluno.prova1 > 35) {
+			printf("\nNota Inválida. ");
+		}
+	} while (aluno.prova1 < 0 || aluno.prova1 > 35);
+
+	do {
+		printf("\nDigite a nota da prova 2: ");
+		fflush(stdin);
+		scanf("%f", &aluno.prova2);
+		if (aluno.prova2 < 0 || aluno.prova2 > 35) {
+			printf("\nNota Inválida. ");
+		}
+	} while (aluno.prova2 < 0 || aluno.prova2 > 35);
+
+	do {
+		printf("\nDigite a nota total dos trabalhos: ");
+		fflush(stdin);
+		scanf("%f", &aluno.trabalhos);
+		if (aluno.trabalhos < 0 || aluno.trabalhos > 30) {
+			printf("\nNota Inválida. ");
+		}
+	} while (aluno.trabalhos < 0 || aluno.trabalhos > 30);
+
+    criarMatricula(novoAluno.nome, matricula,alfabeto);
+    strcpy(novoAluno.matricula,matricula);
+	aluno.alunoDados = novoAluno;
+
+	inserir(lista, aluno);
+}
 
