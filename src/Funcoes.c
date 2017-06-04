@@ -10,7 +10,7 @@
 #include <ctype.h>
 #include "AAI.h"
 
-int alfabeto[26] = {0}; // fazendo assim, inicializamos todas as posicoes como sendo 0, só funciona quando o valor é 0
+//int alfabeto[26] = {0}; // fazendo assim, inicializamos todas as posicoes como sendo 0, só funciona quando o valor é 0
 
 int posicaoAlfabeto (char letra){
 	return (int)letra - (int) 'A' + 1;
@@ -123,7 +123,7 @@ void inserir(ListItem *lista, aluno novoAluno){
 void imprimirLista (ListItem *lista){
 
 	if(!lista){
-		printf("Erro de memória");
+		printf("Erro de memoria");
 		exit(1);
 	}
 
@@ -139,7 +139,7 @@ void imprimirLista (ListItem *lista){
 	}
 }
 
-void cadastrarAluno(ListItem *lista){
+void cadastrarAluno(ListItem *lista,  int *alfabeto){
 
 	dadosAluno novoAluno;
 	aluno aluno;
@@ -160,7 +160,7 @@ void cadastrarAluno(ListItem *lista){
 		fflush(stdin);
 		gets(novoAluno.email);
 		if ((strstr(novoAluno.email, "@") == NULL) || (strstr(novoAluno.email, ".") == NULL)) {
-			printf("\nDigite um e-mail válido.");
+			printf("\nDigite um e-mail valido.");
 		}
 	} while ((strstr(novoAluno.email, "@") == NULL) || (strstr(novoAluno.email, ".") == NULL));
 
@@ -170,7 +170,7 @@ void cadastrarAluno(ListItem *lista){
         scanf("%li", &novoAluno.telefone);
 
         if(novoAluno.telefone <= 0){
-            printf("Telefone inválido.");
+            printf("Telefone invalido.");
         }
     }while(novoAluno.telefone <= 0);
 	//Inserção de Notas
@@ -179,7 +179,7 @@ void cadastrarAluno(ListItem *lista){
 		fflush(stdin);
 		scanf("%f", &aluno.prova1);
 		if (aluno.prova1 < 0 || aluno.prova1 > 35) {
-			printf("\nNota Inválida. ");
+			printf("\nNota Invalida. ");
 		}
 	} while (aluno.prova1 < 0 || aluno.prova1 > 35);
 
@@ -188,7 +188,7 @@ void cadastrarAluno(ListItem *lista){
 		fflush(stdin);
 		scanf("%f", &aluno.prova2);
 		if (aluno.prova2 < 0 || aluno.prova2 > 35) {
-			printf("\nNota Inválida. ");
+			printf("\nNota Invalida. ");
 		}
 	} while (aluno.prova2 < 0 || aluno.prova2 > 35);
 
@@ -197,7 +197,7 @@ void cadastrarAluno(ListItem *lista){
 		fflush(stdin);
 		scanf("%f", &aluno.trabalhos);
 		if (aluno.trabalhos < 0 || aluno.trabalhos > 30) {
-			printf("\nNota Inválida. ");
+			printf("\nNota Invalida. ");
 		}
 	} while (aluno.trabalhos < 0 || aluno.trabalhos > 30);
 
@@ -207,4 +207,32 @@ void cadastrarAluno(ListItem *lista){
 
 	inserir(lista, aluno);
 }
+
+void imprimirReprovados(aluno *Aluno, int notaFinal){
+
+
+        printf("\n-> A Nota Final do Aluno: %s || Matricula: %s ", Aluno->alunoDados.nome, Aluno->alunoDados.matricula);
+        printf("\n   foi: %d, infelizmente abaixo da Media de 60%%", notaFinal);
+        printf("\n-----------------\n");
+}
+
+void relatorioAlunosReprovados(ListItem *lista){
+	ListItem *tmp = lista;
+	float somatorio;
+
+	if(!lista){
+		printf("Erro de memoria");
+		exit(1);
+	}
+
+	while(tmp->proxItem != NULL){
+		somatorio = tmp->proxItem->conteudo.prova1 + tmp->proxItem->conteudo.prova2 + tmp->proxItem->conteudo.trabalhos;
+		if(somatorio < 60){
+			imprimirReprovados(&tmp->conteudo, somatorio);
+		}
+		tmp = tmp->proxItem;
+
+	}
+}
+
 
