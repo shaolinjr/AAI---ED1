@@ -29,19 +29,24 @@ struct item{
 };
 typedef struct item ListItem;
 
+void menu ();
 
 ListItem* criaLista ();
 
 void inserir(ListItem *lista, aluno novoAluno);
-void imprimirLista (ListItem *lista);
+
 void cadastrarAluno(ListItem *lista, int *alfabeto);
 int posicaoAlfabeto (char letra);
-void relatorioAlunosAprovados(); // talvez passar a lista como parametro
 
 void relatorioAlunosReprovados(ListItem *lista); // alterar
 void imprimirReprovados(aluno *Aluno, int notaFinal); //adicionar
 
-void relatorioGeral(); // talvez passar a lista como parametro
+void relatorioAlunosAprovados(ListItem *lista);
+void imprimirAprovados(aluno *Aluno, int notaFinal);
+
+void imprimirRelatorioAlunos(aluno *Aluno, int notaFinal);
+void relatorioAlunos(ListItem *Lista);
+
 
 void criarMatricula (char *nomeAluno, char *matricula, int *alfabeto);
 

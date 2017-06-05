@@ -10,7 +10,6 @@
 #include <ctype.h>
 #include "AAI.h"
 
-//int alfabeto[26] = {0}; // fazendo assim, inicializamos todas as posicoes como sendo 0, só funciona quando o valor é 0
 
 int posicaoAlfabeto (char letra){
 	return (int)letra - (int) 'A' + 1;
@@ -18,38 +17,38 @@ int posicaoAlfabeto (char letra){
 
 void criarMatricula (char *nomeAluno, char *matricula, int *alfabeto) // Receber como parametro um nome de aluno
 {
-    char posicao2e3[3];
-    char posicao4e5[3];
-    char posicao6e7[3];
-    char posicao8[2];
-    char inicial = toupper((int) nomeAluno[0]);
-    int contVerificador;
+	char posicao2e3[3];
+	char posicao4e5[3];
+	char posicao6e7[3];
+	char posicao8[2];
+	char inicial = toupper((int) nomeAluno[0]);
+	int contVerificador;
 	int i;
 
-    // digito 1
-    matricula[0] = inicial;
-    matricula[1] = '\0';
+	// digito 1
+	matricula[0] = inicial;
+	matricula[1] = '\0';
 
-    // 2 e 3 digitos
-    int ascii = (int)inicial;
-    snprintf(posicao2e3, 3, "%d", ascii);
-    strcat(matricula, posicao2e3);
+	// 2 e 3 digitos
+	int ascii = (int)inicial;
+	snprintf(posicao2e3, 3, "%d", ascii);
+	strcat(matricula, posicao2e3);
 
-    // 4 e 5 digitos
-    int posAlfabeto = posicaoAlfabeto(inicial);
-    if (posAlfabeto < 10){
-        posicao4e5[0] = '0';
-        sprintf(&posicao4e5[1], "%d", posAlfabeto);
+	// 4 e 5 digitos
+	int posAlfabeto = posicaoAlfabeto(inicial);
+	if (posAlfabeto < 10){
+		posicao4e5[0] = '0';
+		sprintf(&posicao4e5[1], "%d", posAlfabeto);
 
-    }else{
-        snprintf(posicao4e5,3, "%d", posAlfabeto); // temos que lembrar sempre do \0 quando se trata de string
-    }
-    matricula[5] = '\0';
-    strcat(matricula, posicao4e5);
-    //matricula[8] = '\0';
+	}else{
+		snprintf(posicao4e5,3, "%d", posAlfabeto); // temos que lembrar sempre do \0 quando se trata de string
+	}
+	matricula[5] = '\0';
+	strcat(matricula, posicao4e5);
+	//matricula[8] = '\0';
 
 
-    // 6 e 7 digitos
+	// 6 e 7 digitos
 	alfabeto[posAlfabeto -1]++; // incrementando array -> colocamos aqui, pois começamos o array com 0
 	int contagemAlunos = alfabeto[posAlfabeto - 1];
 	if (contagemAlunos < 10){
@@ -143,8 +142,9 @@ void cadastrarAluno(ListItem *lista,  int *alfabeto){
 
 	dadosAluno novoAluno;
 	aluno aluno;
-    char matricula[9];
+	char matricula[9];
 	//Inserção de Dados Cadastrais
+
 	do{
 		printf("\nDigite o Nome do Aluno: ");
 		fflush(stdin);
@@ -164,15 +164,15 @@ void cadastrarAluno(ListItem *lista,  int *alfabeto){
 		}
 	} while ((strstr(novoAluno.email, "@") == NULL) || (strstr(novoAluno.email, ".") == NULL));
 
-    do {
-        printf("\nDigite o DDD+Telefone: ");
-        fflush(stdin);
-        scanf("%li", &novoAluno.telefone);
+	do {
+		printf("\nDigite o DDD+Telefone: ");
+		fflush(stdin);
+		scanf("%li", &novoAluno.telefone);
 
-        if(novoAluno.telefone <= 0){
-            printf("Telefone invalido.");
-        }
-    }while(novoAluno.telefone <= 0);
+		if(novoAluno.telefone <= 0){
+			printf("Telefone invalido.");
+		}
+	}while(novoAluno.telefone <= 0);
 	//Inserção de Notas
 	do {
 		printf("\nDigite a nota da prova 1: ");
@@ -201,8 +201,8 @@ void cadastrarAluno(ListItem *lista,  int *alfabeto){
 		}
 	} while (aluno.trabalhos < 0 || aluno.trabalhos > 30);
 
-    criarMatricula(novoAluno.nome, matricula,alfabeto);
-    strcpy(novoAluno.matricula,matricula);
+	criarMatricula(novoAluno.nome, matricula,alfabeto);
+	strcpy(novoAluno.matricula,matricula);
 	aluno.alunoDados = novoAluno;
 
 	inserir(lista, aluno);
@@ -211,11 +211,10 @@ void cadastrarAluno(ListItem *lista,  int *alfabeto){
 void imprimirReprovados(aluno *Aluno, int notaFinal){
 
 
-        printf("\n-> A Nota Final do Aluno: %s || Matricula: %s ", Aluno->alunoDados.nome, Aluno->alunoDados.matricula);
-        printf("\n   foi: %d, infelizmente abaixo da Media de 60%%", notaFinal);
-        printf("\n-----------------\n");
+	printf("\n-> A Nota Final do Aluno: %s || Matricula: %s ", Aluno->alunoDados.nome, Aluno->alunoDados.matricula);
+	printf("\n   foi: %d, infelizmente abaixo da Media de 60%%", notaFinal);
+	printf("\n-----------------\n");
 }
-
 void relatorioAlunosReprovados(ListItem *lista){
 	ListItem *tmp = lista;
 	float somatorio;
@@ -228,11 +227,83 @@ void relatorioAlunosReprovados(ListItem *lista){
 	while(tmp->proxItem != NULL){
 		somatorio = tmp->proxItem->conteudo.prova1 + tmp->proxItem->conteudo.prova2 + tmp->proxItem->conteudo.trabalhos;
 		if(somatorio < 60){
-			imprimirReprovados(&tmp->conteudo, somatorio);
+			imprimirReprovados(&tmp->proxItem->conteudo, somatorio);
 		}
 		tmp = tmp->proxItem;
 
 	}
+}
+
+
+void imprimirAprovados(aluno *Aluno, int notaFinal){
+
+
+	printf("\n-> A Nota Final do Aluno: %s || Matricula: %s ", Aluno->alunoDados.nome, Aluno->alunoDados.matricula);
+	printf("\n   foi: %d, felizmente foi suficiente e passou!", notaFinal);
+	printf("\n-----------------\n");
+}
+void relatorioAlunosAprovados(ListItem *lista){
+
+	ListItem *tmp = lista;
+	float soma;
+
+	if(!lista){
+		printf("erro de memoria");
+		exit(1);
+	}
+
+	while(tmp->proxItem != NULL){
+		soma = tmp->proxItem->conteudo.prova1 +
+			   tmp->proxItem->conteudo.prova2 + tmp->proxItem->conteudo.trabalhos;
+		if(soma >= 60){
+			imprimirAprovados(&tmp->proxItem->conteudo, soma);
+		}
+		tmp = tmp->proxItem;
+	}
+}
+
+void imprimirRelatorioAlunos(aluno *Aluno, int notaFinal){
+	printf("\n-> Aluno............: %s",Aluno->alunoDados.nome);
+	printf("\n-> Matricula........: %s",Aluno->alunoDados.matricula);
+	printf("\n-> Email............: %s",Aluno->alunoDados.email);
+	printf("\n-> Telefone.........: %ld",Aluno->alunoDados.telefone);
+	printf("\n-> Nota-Prova1......: %.2f", Aluno->prova1);
+	printf("\n-> Nota-Prova2......: %.2f", Aluno->prova2);
+	printf("\n-> Nota-Trabalhos...: %.2f", Aluno->trabalhos);
+	printf("\n-> Nota final.......: %d", notaFinal);
+	printf("\n|====================|\n");
+}
+void relatorioAlunos(ListItem *Lista) {
+
+	float notaFinal;
+	ListItem *tmp = Lista;
+
+	if (!Lista) {
+		printf("Erro de memoria");
+		exit(1);;
+	}
+
+	while (tmp->proxItem != NULL) {
+		notaFinal = tmp->proxItem->conteudo.prova1 +
+					tmp->proxItem->conteudo.prova2 + tmp->proxItem->conteudo.trabalhos;
+
+		imprimirRelatorioAlunos(&tmp->proxItem->conteudo, notaFinal);
+
+		tmp = tmp->proxItem;
+
+	}
+}
+
+
+void menu (){
+
+	printf(" ********** MENU ********** \n");
+	printf("1) Cadastrar aluno\n");
+	printf("2) Imprimir aprovados\n");
+	printf("3) Imprimir reprovados\n");
+	printf("4) Imprimir relatorio geral\n");
+	printf("5) Sair\n");
+
 }
 
 
